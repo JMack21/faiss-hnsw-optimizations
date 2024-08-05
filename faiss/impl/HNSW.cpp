@@ -421,9 +421,15 @@ void greedy_update_nearest(
         size_t begin, end;
         hnsw.neighbor_range(nearest, level, &begin, &end);
         for (size_t i = begin; i < end; i++) {
+
+            //form plane here
+
             storage_idx_t v = hnsw.neighbors[i];
             if (v < 0)
                 break;
+            
+            //evaluate plane here
+            
             float dis = qdis(v);
             if (dis < d_nearest) {
                 nearest = v;
@@ -835,6 +841,36 @@ int extract_k_from_ResultHandler(ResultHandler<C>& res) {
 }
 
 } // anonymous namespace
+
+hyperplaneConsts formHyperplane(idx_t current, idx_t query){
+    hyperplaneConsts plane;
+    plane.numCoefficients = 0; //should be dimensionality of one of the nodes
+    plane.dblDist = 0; // should be the distance from current to query squared, then doubled
+    
+    plane.coefficients = (float*)malloc(plane.numCoefficients * sizeof(float));
+
+    plane.constant = 0;
+
+    for(int i = 0; i < plane.numCoefficients; i++){
+        //plane.coefficients[i] = current[i] - query[i]; //still dont know how vectors work but it should be vector component i of current and query subtracted
+        //plane.constant += plane.coefficients[i] * query[i]; //same issue as line above
+    }
+
+}
+
+bool evalHyperplane(hyperplaneConsts plane, idx_t friendNode){
+    
+    float sum = 0;
+    for(int i = 0; i < plane.numCoefficients; i++){
+        //sum += plane.coefficients[i] * friendNode[i] /*i dont know how to work with these vectors*/;
+    }
+    sum += plane.constant;
+    if(sum > 0 && sum < plane.dblDist){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 HNSWStats HNSW::search(
         DistanceComputer& qdis,

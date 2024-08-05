@@ -43,6 +43,20 @@ struct HNSWStats;
 template <class C>
 struct ResultHandler;
 
+struct nodeTracker{
+    int numLayers;
+
+    //A 2 by numLayers array where the first column is the number of nodes ruled out by the hyperplane, and the second column is the total number of nodes evaluated. the rows represent which layer the nodes were on
+    int* layerTable[2];
+};
+
+struct hyperplaneConsts{
+    int numCoefficients; //equivalent to dimensionality
+    float *coefficients;
+    float constant;
+    float dblDist; // double the squared distance from the current node to the query node
+};
+
 struct SearchParametersHNSW : SearchParameters {
     int efSearch = 16;
     bool check_relative_distance = true;
