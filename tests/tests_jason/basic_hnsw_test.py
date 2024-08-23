@@ -10,7 +10,8 @@ d = 128 # dimensionality
 M = 32 # max number of friends
 nb = 100000 # number of vectors in train set
 nq = 1000 # number of vectors in query/test set
-efConstruction = 1 # efConstruction is the number of nearest neighbors returned on a search
+efConstruction = 40 #  how many entry points will be explored between layers during the construction
+efSearch = 16 # how many entry points will be explored between layers during the search
 
 # generating a dataset
 np.random.seed(1234)
@@ -26,4 +27,7 @@ index.add(xb)
 index.hnsw.max_level # prints the max level
 index.hnsw.entry_point # prints the entry point
 
-index.hnsw.efConstruction = 
+index.hnsw.efConstruction = efConstruction
+index.hnsw.efSearch = efSearch
+
+
